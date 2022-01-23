@@ -6,6 +6,7 @@ const app = express()
 const router = require('./router')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 
 // App Setup
 app.use(morgan('combined'))
+app.use(cors());
 app.use(bodyParser.json({ type: '*/*' }))
 router(app)
 
