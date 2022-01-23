@@ -13,6 +13,10 @@ const tokenForUser = (user) => {
   }, process.env.JWT_SECRET, { expiresIn: '1h' });
 }
 
+exports.signin = async (req, res, next) => {
+  res.send({ token: tokenForUser(req.user) });
+}
+
 exports.signup = async (req, res, next) => {
   const { email, password } = req.body;
 
