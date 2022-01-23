@@ -1,5 +1,17 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const tokenForUser = (user) => {
+  const timestamp = new Date().getTime();
+  return jwt.sign({
+    sub: user.id,
+    iat: timestamp,
+  }, process.env.JWT_SECRET, { expiresIn: '1h' });
+}
 
 exports.signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -21,7 +33,7 @@ exports.signup = async (req, res, next) => {
     });
     await user.save();
 
-    res.json({ success: true });
+    res.json({ token: tokenForUser(user) });
   } catch(err) {
     return next(err);
   }
